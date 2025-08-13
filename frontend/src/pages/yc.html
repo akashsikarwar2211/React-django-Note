@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uske Paas Jaao</title>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #f1e6d6;
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+            line-height: 1.9;
+            padding: 30px;
+            max-width: 750px;
+            margin: auto;
+            font-size: 1.1em;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            color: #ffdd99;
+            letter-spacing: 1px;
+            animation: fadeIn 2s ease-out;
+        }
+        p {
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+        }
+        p:nth-child(2) { animation-delay: 0.4s; }
+        p:nth-child(3) { animation-delay: 0.8s; }
+        p:nth-child(4) { animation-delay: 1.2s; }
+        p:nth-child(5) { animation-delay: 1.6s; }
+        p:nth-child(6) { animation-delay: 2s; }
+        p:nth-child(7) { animation-delay: 2.4s; }
+        p:nth-child(8) { animation-delay: 2.8s; }
+        p:nth-child(9) { animation-delay: 3.2s; }
+        p.quote {
+            font-style: italic;
+            color: #ffd9b3;
+            text-align: center;
+            margin-top: 30px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio autoplay loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_b1e6603e4d.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <h1>Uske Paas Jaao</h1>
+
+    <p>Jo tumhe samajhne ki koshish kare,<br>
+    Chahe tum khud ko samjha na pao…<br>
+    Uske paas jaao.</p>
+
+    <p>Jo tumhari khamoshi ko bhi padh le,<br>
+    Bina ek shabd ke samajh le…<br>
+    Uske paas jaao.</p>
+
+    <p>Jo tumhara bojh baant le,<br>
+    Chahe tumne kabhi maanga na ho…<br>
+    Uske paas jaao.</p>
+
+    <p>Jab bheed mein khud ko akela pao,<br>
+    Aur saans bhi bojh lage…<br>
+    Uske paas jaao.</p>
+
+    <p>Pata nahi kyun, yeh dil hamesha bhaari rehta hai.<br>
+    Kuch chahiye nahi, phir bhi ek intezaar sa laga rehta hai…<br>
+    Sapne kuch aur the, socha kuch aur tha…<br>
+    Aur ho kuch aur raha hai.</p>
+
+    <p>Na pichhe jaa sakta hoon,<br>
+    Na aage badh pa raha hoon.<br>
+    Bas ek kone mein baitha rehta hoon,<br>
+    Jaise khud se bhi nazar milane ki himmat kho chuka hoon.</p>
+
+    <p>Parivaar ka sahara banna tha,<br>
+    Par khud ek sahara banne ki talash mein hoon.<br>
+    Shayad zindagi aisi hi hai…<br>
+    Jo hum chahte hain, wo aksar nahi hota.</p>
+
+    <p class="quote">"Chhodo… zyada sochne ka kya faida.<br>
+    Phone rakhte hain…<br>
+    Aur chup-chaap so jaate hain."</p>
+</body>
+</html>
