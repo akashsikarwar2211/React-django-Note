@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
   options {
     timestamps()
     timeout(time: 60, unit: 'MINUTES')
@@ -16,7 +16,6 @@ pipeline {
   
   stages {
     stage('Checkout') {
-      agent { label 'docker' }
       steps {
         checkout scm
       }
@@ -26,7 +25,6 @@ pipeline {
       agent {
         docker {
           image 'node:22-bullseye'
-          label 'docker'
           args '-u root:root'
         }
       }
@@ -47,7 +45,6 @@ npm run lint
       agent {
         docker {
           image 'node:22-bullseye'
-          label 'docker'
           args '-u root:root'
         }
       }
@@ -67,7 +64,6 @@ npm run test:unit || true
       agent {
         docker {
           image 'node:22-bullseye'
-          label 'docker'
           args '-u root:root'
         }
       }
@@ -85,7 +81,6 @@ npm audit --audit-level=moderate || echo "Warning: npm vulnerabilities detected.
       agent {
         docker {
           image 'python:3.11-slim'
-          label 'docker'
           args '-u root:root'
         }
       }
@@ -114,7 +109,6 @@ python -m pytest --junitxml=TEST-results.xml --cov=. --cov-report=xml || true
     }
 
     stage('Build Docker Image') {
-      agent { label 'docker' }
       when {
         expression { return fileExists('Dockerfile') }
       }
@@ -130,7 +124,6 @@ docker build \
     }
 
     stage('Push to Registry') {
-      agent { label 'docker' }
       when {
         expression { return fileExists('Dockerfile') }
       }
@@ -146,7 +139,6 @@ docker logout "$REGISTRY"
     }
 
     stage('Deploy') {
-      agent { label 'docker' }
       when {
         branch 'main'
         expression { return fileExists('Dockerfile') }
@@ -169,9 +161,7 @@ echo "Deployment complete."
 
   post {
     always {
-      node('docker') {
-        cleanWs()
-      }
+      cleanWs()
     }
     success {
       echo 'Build and tests succeeded.'
