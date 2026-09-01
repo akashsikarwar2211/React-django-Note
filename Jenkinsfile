@@ -4,12 +4,14 @@ pipeline {
     options {
         skipDefaultCheckout(true)
         disableConcurrentBuilds()
+
         buildDiscarder(
             logRotator(
                 daysToKeepStr: '10',
                 numToKeepStr: '20'
             )
         )
+
         timestamps()
         timeout(time: 1, unit: 'HOURS')
         ansiColor('xterm')
@@ -24,10 +26,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Remove files left by an interrupted previous build.
                 deleteDir()
-
-                // Checkout the branch configured in the Jenkins job.
                 checkout scm
 
                 sh '''
@@ -49,13 +48,24 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh '''
+                        # Use writable directories because the container runs
+                        # as the Jenkins UID instead of root.
+                        export HOME="${WORKSPACE}/.node-home"
+                        export NPM_CONFIG_CACHE="${WORKSPACE}/.npm-cache"
+
+                        mkdir -p "${HOME}"
+                        mkdir -p "${NPM_CONFIG_CACHE}"
+
                         echo "Node version:"
                         node --version
 
                         echo "NPM version:"
                         npm --version
 
+                        echo "Installing frontend dependencies..."
                         npm ci
+
+                        echo "Building Vite frontend..."
                         npm run build
                     '''
 
@@ -79,12 +89,21 @@ pipeline {
             steps {
                 dir('backend') {
                     sh '''
+                        # Use writable directories for Python and pip.
+                        export HOME="${WORKSPACE}/.python-home"
+                        export PIP_CACHE_DIR="${WORKSPACE}/.pip-cache"
+
+                        mkdir -p "${HOME}"
+                        mkdir -p "${PIP_CACHE_DIR}"
+
                         echo "Python version:"
                         python --version
 
+                        echo "Creating Python virtual environment..."
                         python -m venv .venv
                         . .venv/bin/activate
 
+                        echo "Installing backend dependencies..."
                         python -m pip install --upgrade pip
                         pip install -r requirements.txt
 
@@ -110,6 +129,8 @@ pipeline {
 
             steps {
                 sh '''
+                    echo "Building application Docker image..."
+
                     docker build \
                         --tag "${DOCKER_IMAGE}:${BUILD_NUMBER}" \
                         .
@@ -125,6 +146,10 @@ pipeline {
 
         failure {
             echo "Build ${BUILD_NUMBER} failed. Check the failed stage above."
+        }
+
+        aborted {
+            echo "Build ${BUILD_NUMBER} was aborted."
         }
 
         always {
